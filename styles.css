@@ -2,6 +2,8 @@
     display: grid;
     grid-template-columns: repeat(3, 100px);
     gap: 5px;
+    margin:   20px auto;
+   justify-self: center
 }
 
 .cell {
@@ -13,4 +15,17 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+}
+
+#restart {
+    background-color: turquoise;
+    border: 1px solid black ;
+    border-radius: 2px;
+    padding: 5px 20px 5px  20px;
+    
+}
+
+p{
+    font-size: 24px;
+  
 }

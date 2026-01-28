@@ -102,18 +102,20 @@ if (roundCounter === 9) {
       ${b[6]} | ${b[7]} | ${b[8]}
     `);
   };
-
+const getWinner = () => winner;
   return {
   startGame,
   playRound,
   getGameOver,
   getCurrentPlayer,
+  getWinner,
 };
 })();
 
 const DisplayController = (function () {
   const cells = document.querySelectorAll(".cell");
   const message = document.querySelector("#message");
+  const restartBtn = document.querySelector("#restart");
 
   const render = () => {
     const board = Gameboard.getBoard();
@@ -121,12 +123,15 @@ const DisplayController = (function () {
       cell.textContent = board[index];
     });
 
-    if (GameController.getGameOver()) {
-      message.textContent = "Game over!";
-    } else {
-      message.textContent =
-        `${GameController.getCurrentPlayer().name}'s turn`;
-    }
+    if (GameController.getWinner()) {
+  message.textContent = `${GameController.getWinner()} wins! 🎉`;
+} else if (GameController.getGameOver()) {
+  message.textContent = "It's a tie!";
+} else {
+  message.textContent =
+    `${GameController.getCurrentPlayer().name}'s turn`;
+}
+
   };
 
   cells.forEach(cell => {
@@ -135,6 +140,10 @@ const DisplayController = (function () {
       GameController.playRound(index);
       render();
     });
+    restartBtn.addEventListener("click", () => {
+  GameController.startGame("Player 1", "Player 2");
+  render();
+});
   });
 
   return { render };
