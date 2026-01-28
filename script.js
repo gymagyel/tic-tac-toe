@@ -105,3 +105,26 @@ if (roundCounter === 9) {
   };
 })();
 
+const DisplayController = (function () {
+  const cells = document.querySelectorAll(".cell");
+
+  const render = () => {
+    const board = Gameboard.getBoard();
+    cells.forEach((cell, index) => {
+      cell.textContent = board[index];
+    });
+  };
+
+  cells.forEach(cell => {
+    cell.addEventListener("click", () => {
+      const index = cell.dataset.index;
+      GameController.playRound(Number(index));
+      render();
+    });
+  });
+
+  return { render };
+})();
+
+GameController.startGame("Player 1", "Player 2");
+DisplayController.render();
