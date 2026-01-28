@@ -27,6 +27,11 @@ const GameController= (function () {
   let currentPlayerIndex = 0;
   let gameOver = false;
   let roundCounter = 0;
+  let winner = null;
+
+  const getGameOver = () => gameOver;
+const getCurrentPlayer = () => players[currentPlayerIndex];
+
 
   const startGame = (player1Name, player2Name) => {
     players = [
@@ -58,7 +63,7 @@ roundCounter = roundCounter + 1;
     printBoard();
 
     if (checkWin(currentPlayer.mark)) {
-      console.log(`${currentPlayer.name} wins!`);
+      winner = currentPlayer.name;
       gameOver = true;
       return;
     }
@@ -70,7 +75,6 @@ if (roundCounter === 9) {
     }
     currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
 
-    
   };
 
   const checkWin = (mark) => {
@@ -100,25 +104,35 @@ if (roundCounter === 9) {
   };
 
   return {
-    startGame,
-    playRound,
-  };
+  startGame,
+  playRound,
+  getGameOver,
+  getCurrentPlayer,
+};
 })();
 
 const DisplayController = (function () {
   const cells = document.querySelectorAll(".cell");
+  const message = document.querySelector("#message");
 
   const render = () => {
     const board = Gameboard.getBoard();
     cells.forEach((cell, index) => {
       cell.textContent = board[index];
     });
+
+    if (GameController.getGameOver()) {
+      message.textContent = "Game over!";
+    } else {
+      message.textContent =
+        `${GameController.getCurrentPlayer().name}'s turn`;
+    }
   };
 
   cells.forEach(cell => {
     cell.addEventListener("click", () => {
-      const index = cell.dataset.index;
-      GameController.playRound(Number(index));
+      const index = Number(cell.dataset.index);
+      GameController.playRound(index);
       render();
     });
   });
@@ -126,5 +140,7 @@ const DisplayController = (function () {
   return { render };
 })();
 
+
 GameController.startGame("Player 1", "Player 2");
 DisplayController.render();
+console.log(GameController);
